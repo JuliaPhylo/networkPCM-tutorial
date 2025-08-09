@@ -1,0 +1,124 @@
+---
+title: "Discrete trait"
+format: html
+---
+
+```{julia}
+#| code-fold: true
+#| output: false
+# code from prior sections
+using CSV, DataFrames, PhyloNetworks, PhyloPlots, RCall
+using StatsBase, StatsModels, PhyloTraits
+net = readnewick("data/polemonium_network_calibrated.phy");
+for tip in net.node tip.name = replace(tip.name, r"_2$" => s""); end
+traits = CSV.read("data/polemonium_traits_morph.csv", DataFrame)
+subset!(traits, :morph => ByRow(in(tiplabels(net))))
+```
+
+For illustrative purposes, we are going to look at the evolution
+of mean elevation as a discrete variable. We discretize elevation
+using the threshold 2.3 km below, because the distribution of elevation
+shows somewhat of a gap around that value, and a reasonable number
+of morphs both below and above that value.
+
+```{julia}
+dat = DataFrame(
+    morph = String.(traits[:, :morph]),
+    elevation = map( x -> (x .> 2.3 ? "hi" : "lo"), traits.elevation )
+)
+```
+
+## estimating the evolutionary rate(s)
+
+For binary traits, we can use the `:ERSM` model, for
+"equal-rate substition model":
+
+```{julia}
+fit = fitdiscrete(net, :ERSM, dat.morph, select(dat, :elevation))
+```
+
+or the more general "binary trait substitution model" `:BTSM` that
+does not constrain the two rates to be equal:
+
+```{julia}
+fit_uneq = fitdiscrete(net, :BTSM, dat.morph, select(dat, :elevation))
+```
+
+Using a likelihood ratio test, we see that there is *no*
+evidence for unequal rates:
+```{julia}
+x2 = 2*(loglikelihood(fit_uneq) - loglikelihood(fit))
+```
+
+```{julia}
+import Distributions: Chisq, ccdf
+ccdf(Chisq(1), x2) # p-value: P(Χ² on 1 df > observed x2)
+```
+
+## ancestral state probabilities
+
+We can calculate ancestral state probabilities like this, but
+the output data frame is hard to interpret because it's unclear which
+node has which number:
+```{julia}
+asr = ancestralreconstruction(fit)
+```
+
+But we can map the posterior probability of state "hi" onto the network.
+It is important to use the network stored in the fitted object, to be assured
+that the node numbers match.
+```{julia}
+#| label: fig-5-asr1
+#| fig-cap: "network stored in fitted object, to map ancestral state probabilities"
+#| fig-subcap: 
+#|   - "showing node numbers"
+#|   - "showing the posterior probability of state 'hi'"
+#| layout-ncol: 2
+R"par"(mar=[0,0,0,0]);
+plot(fit.net, shownodenumber=true, showgamma=true, tipoffset=0.1, xlim=[0,15]);
+plot(fit.net, nodelabel=select(asr, :nodenumber, :hi), nodelabeladj=[1,-0.1],
+     tipoffset=0.1, xlim=[0,15]);
+```
+
+## effect of gene flow
+
+What is the evidence that a trait was inherited via gene flow
+(along the minor hybrid edge) versus "vertically" (via the major hybrid edge)?
+
+To answer this question, we can extract the prior probability of either option,
+and the posterior probabilities conditional on the data.
+Then, the Bayes factor to compare the 2 hypotheses, minor versus major edge
+(or gene flow versus vertical), can be expressed as an odds ratio:
+$$\mathrm{BF} = \frac{P(\mathrm{data} \mid \mathrm{minor})}{P(\mathrm{data} \mid \mathrm{mafor})} = \frac{\frac{P(\mathrm{minor} \mid \mathrm{data})}{P(\mathrm{major}\mid\mathrm{data})}}{\frac{P(\mathrm{minor})}{P(\mathrm{major})}}\,.$$
+
+Here, let's say we want to focus on the reticulation that is ancestral
+to elusum (node 33, H20). From @fig-5-asr1 (left) we see that the
+major ("vertical") parent edge has γ = 0.741 = P(major) and the
+minor ("gene flow") edge has γ = 0.259 = P(minor).
+So at this reticulation, the prior odds of the trait being
+inherited via gene flow is 0.259/0.741 = 0.35.
+Here how we may get this prior odds programmatically:
+
+```{julia}
+nodeH20 = net.node[findfirst(n->n.name=="H20", net.node)] # find node named H20
+priorminor = getparentedgeminor(nodeH20).gamma            # γ of its minor parent
+priorodds = priorminor / (1-priorminor)
+```
+
+To extract the posterior odds and calculate the Bayes factor, we can do as
+follows, to focus on just 1 reticulation of interest and integrate out what
+happened at other reticulations:
+```{julia}
+postminor = exp(PhyloTraits.posterior_loghybridweight(fit, "H20"))
+postodds = postminor / (1-postminor)
+```
+
+That's an increase. The Bayes factor to compare the gene flow (minor edge)
+versus vertical (major edge) hypotheses is then:
+
+```{julia}
+postodds / priorodds
+```
+
+It's above 1, so there's evidence of inheritance via gene flow,
+but not very much above 1 (e.g. less than 3), so it's equivocal evidence only.

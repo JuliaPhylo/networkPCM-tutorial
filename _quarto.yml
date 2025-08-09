@@ -1,0 +1,50 @@
+project:
+  type: website
+  execute-dir: project
+  output-dir: _site
+  render:
+      - index.qmd
+      - topic*.qmd
+
+website:
+  title: "Comparative methods on networks"
+  site-url: https://juliaphylo.github.io/networkPCM-tutorial
+  repo-url: https://github.com/JuliaPhylo/networkPCM-tutorial
+  repo-actions: [issue]
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: https://juliaphylo.github.io/PhyloNetworks.jl/v1.1/
+        text: PhyloNetworks
+    right:
+      - icon: github
+        href: https://github.com/JuliaPhylo/networkPCM-tutorial
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - href: index.qmd
+        text: Home
+      - topic1-installation.qmd
+      - topic2-getstarted.qmd
+      - topic3-averagedistances.qmd
+      - topic4-netcalibration.qmd
+      - topic5-phyloANOVA.qmd
+      - topic6-asr.qmd
+      - topic7-impactgeneflow.qmd
+      - topic8-discrete.qmd
+      - topic9-visualization.qmd
+  page-navigation: true
+
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+      light: flatly
+      dark: darkly
+    css: styles.css
+    toc: true
+
+# engines: ['julia'] # problem: due to each Rcall to R in a separate environment
+jupyter: julia-1.11  # older engine. solves the problem. installation more complex

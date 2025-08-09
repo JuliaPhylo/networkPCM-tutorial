@@ -1,0 +1,38 @@
+---
+title: "Comparative methods on reticulate phylogenies"
+subtitle: "using JuliaPhylo"
+---
+
+This repository contains materials compatible with
+[PhyloNetworks](https://github.com/juliaphylo/PhyloNetworks.jl) v1
+and [PhyloTraits](https://github.com/juliaphylo/PhyloTraits.jl).
+It is an update of this 2023 [workshop](https://cecileane.github.io/networkPCM-workshop/),
+which requires the older PhyloNetworks v0.16.
+
+You can find and clone the tutorial material at this
+[github repository](https://github.com/juliaphylo/networkPCM-tutorial).
+
+Goal of the tutorial:
+learn to analyze trait data using phylogenetic comparative methods (PCMs)
+on reticulate phylogenies, modelled by phylogenetic networks --also named
+admixture graphs when modelling closely-related populations.
+
+Comparative methods are meant to answer questions about trait evolution.
+In this tutorial, we will learn about methods on networks:
+
+- to account for reticulation in the phylogeny, and
+- to look at how reticulation might have affected trait evolution.
+
+## topics covered
+
+- how to calibrate a network, if needed
+- continuous response:
+  * phylogenetic regression & phylogenetic ANOVA when the phylogeny is a network.
+    Predictors can be continuous or discrete.
+  * how account for within-species variation in the response trait
+  * ancestral state reconstruction
+  * how to measure the impact of gene flow
+- discrete trait
+  * ancestral state reconstruction
+  * was the trait via gene flow?
+- how to visualize the results
