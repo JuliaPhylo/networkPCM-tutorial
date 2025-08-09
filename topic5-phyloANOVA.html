@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Phylogenetic regression – Comparative methods on networks</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./topic6-asr.html" rel="next">
+<link href="./topic4-netcalibration.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-bc185b5c5bdbcb35c2eb49d8a876ef70.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-d20f5cef5e207251eca059be6064b8af.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-8652ff5161e63bdd14abb267f7ee8a78.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-d20f5cef5e207251eca059be6064b8af.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Comparative methods on networks</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://juliaphylo.github.io/PhyloNetworks.jl/v1.1/"> 
+<span class="menu-text">PhyloNetworks</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/JuliaPhylo/networkPCM-tutorial"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./topic5-phyloANOVA.html">Phylogenetic regression</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topic1-installation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preparation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topic2-getstarted.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Getting started</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topic3-averagedistances.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Average distances</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topic4-netcalibration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Network calibration</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topic5-phyloANOVA.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Phylogenetic regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topic6-asr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ancestral state reconstruction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topic7-impactgeneflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Impact of gene flow</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topic8-discrete.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Discrete trait</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topic9-visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Visualization</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#match-taxon-names" id="toc-match-taxon-names" class="nav-link active" data-scroll-target="#match-taxon-names">match taxon names</a></li>
+  <li><a href="#phylogenetic-regression" id="toc-phylogenetic-regression" class="nav-link" data-scroll-target="#phylogenetic-regression">phylogenetic regression</a></li>
+  <li><a href="#accounting-for-within-species-variation" id="toc-accounting-for-within-species-variation" class="nav-link" data-scroll-target="#accounting-for-within-species-variation">accounting for within-species variation</a></li>
+  <li><a href="#likelihood-ratio-test" id="toc-likelihood-ratio-test" class="nav-link" data-scroll-target="#likelihood-ratio-test">likelihood ratio test</a></li>
+  <li><a href="#within-species-variation-using-species-summaries" id="toc-within-species-variation-using-species-summaries" class="nav-link" data-scroll-target="#within-species-variation-using-species-summaries">within-species variation using species summaries</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/JuliaPhylo/networkPCM-tutorial/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Phylogenetic regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div id="e5e9d288" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code from prior sections</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span>, <span class="bu">PhyloNetworks</span>, <span class="bu">PhyloPlots</span>, <span class="bu">RCall</span>, <span class="bu">StatsBase</span>, <span class="bu">StatsModels</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Phylogenetic regression and phylogenetic ANOVA are for:</p>
+<ul>
+<li>a continuous response variable</li>
+<li>using 0, 1 or more predictor variables, which can be continuous or discrete</li>
+</ul>
+<p>Here, we can do this when the phylogeny is a network. The residuals are assumed to be phylogenetically correlated. Residuals capture the variation in the response that deviate from the prediction using the predictor variables.</p>
+<p>In this tutorial, we will use the following continuous traits:</p>
+<ul>
+<li>response: leaflet length or width, which were log-transformed to obtain a more normal distribution within each species morph, and a more homogeneous variance across species morphs. A combined trait, log(leaflet area) was calculated from leaflet length and width through the formula <code>area ≈ π length/2 × width/2</code>.<br>
+For this tutorial, we will focus on leaflet length (log-transformed) for the response variable.</li>
+<li>possible predictors: elevation and latitude.</li>
+</ul>
+<p>We will use our calibrated network. If you did not run the previous section or started a new julia session, we can read this network from file:</p>
+<div id="c1f17217" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>net <span class="op">=</span> <span class="fu">readnewick</span>(<span class="st">"data/polemonium_network_calibrated.phy"</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="match-taxon-names" class="level2">
+<h2 class="anchored" data-anchor-id="match-taxon-names">match taxon names</h2>
+<p>We start with the case when we have 1 value per species —morph in our case.</p>
+<div id="4152bcf5" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>traits_morph <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"data/polemonium_traits_morph.csv"</span>, DataFrame)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select!</span>(traits_morph, <span class="op">:</span>morph, <span class="op">:</span>llength, <span class="op">:</span>elevation, <span class="op">:</span>lat)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(traits_morph, <span class="fl">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div><div style="float: left;"><span>4×4 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">morph</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">llength</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">elevation</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">lat</th>
+</tr>
+<tr class="subheader headerLastRow even">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String31">String31</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">acutiflorum</td>
+<td style="text-align: right;">0.190834</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">62.26</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">aff._viscosum_sp._nov.</td>
+<td style="text-align: right;">-1.371</td>
+<td style="text-align: right;">3.0785</td>
+<td style="text-align: right;">44.0958</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">albiflorum</td>
+<td style="text-align: right;">0.974391</td>
+<td style="text-align: right;">2.347</td>
+<td style="text-align: right;">41.4855</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: left;">apachianum</td>
+<td style="text-align: right;">0.289364</td>
+<td style="text-align: right;">2.68836</td>
+<td style="text-align: right;">33.927</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Taxon names are in the column “morph”, but don’t match exactly with the names in the network —somethign quite typical.</p>
+<div id="8245821a" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setdiff</span>(<span class="fu">tiplabels</span>(net), traits_morph.morph) <span class="co"># names in the network but not in trait df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>7-element Vector{String}:
+ "reptans_2"
+ "delicatum_2"
+ "carneum_2"
+ "elusum_2"
+ "aff._viscosum_sp._nov._2"
+ "foliosissimum_2"
+ "chartaceum_2"</code></pre>
+</div>
+</div>
+<div id="4764d45e" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setdiff</span>(traits_morph.morph, <span class="fu">tiplabels</span>(net)) <span class="co"># names in trait df but not in network</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>20-element Vector{String}:
+ "acutiflorum"
+ "aff._viscosum_sp._nov."
+ "albiflorum"
+ "boreale"
+ "californicum"
+ "carneum"
+ "chartaceum"
+ "delicatum"
+ "elusum"
+ "eximium"
+ "filicinum"
+ "flavum"
+ "foliosissimum"
+ "nevadense"
+ "occidentale_lacustre"
+ "pulcherrimum_lindleyi"
+ "pulcherrimum_pulcherrimum"
+ "reptans"
+ "vanbruntiae"
+ "viscosum"</code></pre>
+</div>
+</div>
+<p>We notice that some taxa in the network have a suffix “_2” that is not in the trait data, and that the trait data has extra species.</p>
+<p>Let’s use a regular expression to remove the suffix “_2” from the tip names in the network:</p>
+<div id="ba1dad00" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> tip <span class="kw">in</span> net.node</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  tip.name <span class="op">=</span> <span class="fu">replace</span>(tip.name, <span class="st">r"_2</span><span class="sc">$</span><span class="st">" =&gt; </span>s<span class="st">"") # s"" to substitute what was found with nothing</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">issubset</span>(<span class="fu">tiplabels</span>(net), traits_morph.morph) <span class="co"># true: all taxa in the network have data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>true</code></pre>
+</div>
+</div>
+<p>Finally, let’s reduce our data frame to morphs that are in the network, also something often needed:</p>
+<div id="00f48414" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset!</span>(traits_morph, <span class="op">:</span>morph <span class="op">=&gt;</span> <span class="fu">ByRow</span>(<span class="fu">in</span>(<span class="fu">tiplabels</span>(net))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div><div style="float: left;"><span>17×4 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">morph</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">llength</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">elevation</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">lat</th>
+</tr>
+<tr class="subheader headerLastRow even">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String31">String31</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">aff._viscosum_sp._nov.</td>
+<td style="text-align: right;">-1.371</td>
+<td style="text-align: right;">3.0785</td>
+<td style="text-align: right;">44.0958</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">apachianum</td>
+<td style="text-align: right;">0.289364</td>
+<td style="text-align: right;">2.68836</td>
+<td style="text-align: right;">33.927</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">brandegeei</td>
+<td style="text-align: right;">-0.67488</td>
+<td style="text-align: right;">2.7435</td>
+<td style="text-align: right;">40.0324</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: left;">carneum</td>
+<td style="text-align: right;">0.75653</td>
+<td style="text-align: right;">1.008</td>
+<td style="text-align: right;">43.2211</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5</td>
+<td style="text-align: left;">chartaceum</td>
+<td style="text-align: right;">-1.61233</td>
+<td style="text-align: right;">4.116</td>
+<td style="text-align: right;">37.6344</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">6</td>
+<td style="text-align: left;">confertum</td>
+<td style="text-align: right;">-0.430446</td>
+<td style="text-align: right;">3.7045</td>
+<td style="text-align: right;">38.9484</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">7</td>
+<td style="text-align: left;">delicatum</td>
+<td style="text-align: right;">0.0316277</td>
+<td style="text-align: right;">3.307</td>
+<td style="text-align: right;">38.84</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">8</td>
+<td style="text-align: left;">eddyense</td>
+<td style="text-align: right;">-1.21937</td>
+<td style="text-align: right;">2.744</td>
+<td style="text-align: right;">41.3189</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">9</td>
+<td style="text-align: left;">elegans</td>
+<td style="text-align: right;">-1.06016</td>
+<td style="text-align: right;">2.287</td>
+<td style="text-align: right;">46.904</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">10</td>
+<td style="text-align: left;">elusum</td>
+<td style="text-align: right;">0.21314</td>
+<td style="text-align: right;">1.692</td>
+<td style="text-align: right;">44.7146</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">11</td>
+<td style="text-align: left;">foliosissimum</td>
+<td style="text-align: right;">0.622095</td>
+<td style="text-align: right;">2.6825</td>
+<td style="text-align: right;">38.786</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">12</td>
+<td style="text-align: left;">micranthum</td>
+<td style="text-align: right;">-0.864849</td>
+<td style="text-align: right;">1.128</td>
+<td style="text-align: right;">43.7447</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">13</td>
+<td style="text-align: left;">occidentale_occidentale</td>
+<td style="text-align: right;">0.542457</td>
+<td style="text-align: right;">2.14</td>
+<td style="text-align: right;">42.5916</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">14</td>
+<td style="text-align: left;">pauciflorum</td>
+<td style="text-align: right;">0.222039</td>
+<td style="text-align: right;">2.6375</td>
+<td style="text-align: right;">30.8088</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">15</td>
+<td style="text-align: left;">pectinatum</td>
+<td style="text-align: right;">0.834157</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">47.1283</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">16</td>
+<td style="text-align: left;">pulcherrimum_shastense</td>
+<td style="text-align: right;">-1.04488</td>
+<td style="text-align: right;">3.17</td>
+<td style="text-align: right;">41.3842</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">17</td>
+<td style="text-align: left;">reptans</td>
+<td style="text-align: right;">0.746643</td>
+<td style="text-align: right;">0.242</td>
+<td style="text-align: right;">39.9954</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="phylogenetic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="phylogenetic-regression">phylogenetic regression</h2>
+<p>Let’s fit our model: a Browian motion by default. The output shows the estimated parameters, confidence intervals for the regression coefficients, and other summary.</p>
+<p>Functions for trait evolution are in package <a href="https://juliaphylo.github.io/PhyloTraits.jl/stable/">PhyloTraits</a>, so we load if first. We will also need to load package using StatsModels, for definting statistical model formulas.</p>
+<div id="87acb080" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">PhyloTraits</span>, <span class="bu">StatsModels</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>fit_bm    <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits_morph, net;</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                    tipnames<span class="op">=:</span>morph) <span class="co"># default model: BM</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>PhyloNetworkLinearModel
+
+Formula: llength ~ 1 + elevation + lat
+
+Model: Brownian motion
+
+Parameter Estimates, using REML:
+phylogenetic variance rate: 0.545368
+
+Coefficients:
+────────────────────────────────────────────────────────────────────────────
+                  Coef.  Std. Error      t  Pr(&gt;|t|)  Lower 95%    Upper 95%
+────────────────────────────────────────────────────────────────────────────
+(Intercept)   4.23012     1.81753     2.33    0.0355   0.331896   8.12834
+elevation    -0.58782     0.160091   -3.67    0.0025  -0.93118   -0.24446
+lat          -0.0805585   0.0391812  -2.06    0.0589  -0.164594   0.00347682
+────────────────────────────────────────────────────────────────────────────
+Log Likelihood: -18.3444303454
+AIC: 44.6888606908</code></pre>
+</div>
+</div>
+<p>Pagel’s lambda model can be fitted if the phylogeny is a time-consistent network (all paths from the root to a given node have the same length) and ultrametric:</p>
+<div id="695cd63d" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">istimeconsistent</span>(net)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fit_pagel <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits_morph, net;</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                    model<span class="op">=</span><span class="st">"lambda"</span>, tipnames<span class="op">=:</span>morph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-cyan-fg ansi-bold">[ </span><span class="ansi-cyan-fg ansi-bold">Info: </span>Maximum lambda value to maintain positive branch lengths: 1.30752
+</pre>
+</div>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>PhyloNetworkLinearModel
+
+Formula: llength ~ 1 + elevation + lat
+
+Model: Pagel's lambda
+
+Parameter Estimates, using REML:
+phylogenetic variance rate: 0.582156
+Lambda: 1.1075
+
+Coefficients:
+───────────────────────────────────────────────────────────────────────────
+                 Coef.  Std. Error      t  Pr(&gt;|t|)  Lower 95%    Upper 95%
+───────────────────────────────────────────────────────────────────────────
+(Intercept)   4.14696     1.8205     2.28    0.0389   0.242364   8.05155
+elevation    -0.580068    0.160465  -3.61    0.0028  -0.924231  -0.235906
+lat          -0.079338    0.039152  -2.03    0.0622  -0.163311   0.00463469
+───────────────────────────────────────────────────────────────────────────
+Log Likelihood: -18.3375456513
+AIC: 46.6750913026</code></pre>
+</div>
+</div>
+<ul>
+<li>Which model seems best, based on AIC?</li>
+<li>What is the estimate of λ, and what does it mean?</li>
+<li>Which predictors seem to be correlated with log-leaflet-length, based on Wald-type tests?</li>
+</ul>
+</section>
+<section id="accounting-for-within-species-variation" class="level2">
+<h2 class="anchored" data-anchor-id="accounting-for-within-species-variation">accounting for within-species variation</h2>
+<p>If we have access to traits at the individual level, rather than aggregated at the species level, then we can account for within-species variation. It’s best to do so, because ignoring within-species variation (when present) can cause various biases.</p>
+<p>We start by reading the individual trait data and removing rows for taxa not in the network.</p>
+<div id="28242e3e" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>traits_indiv <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"data/polemonium_traits_individual.csv"</span>, DataFrame)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">subset!</span>(traits_indiv, <span class="op">:</span>morph <span class="op">=&gt;</span> <span class="fu">ByRow</span>(<span class="fu">in</span>(<span class="fu">tiplabels</span>(net))))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">last</span>(traits_indiv, <span class="fl">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<div><div style="float: left;"><span>4×6 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">morph</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">llength</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">lwidth</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">elevation</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">lat</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">larea</th>
+</tr>
+<tr class="subheader headerLastRow even">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String31">String31</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">reptans</td>
+<td style="text-align: right;">0.675492</td>
+<td style="text-align: right;">-0.281038</td>
+<td style="text-align: right;">0.242</td>
+<td style="text-align: right;">39.9954</td>
+<td style="text-align: right;">0.15289</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">reptans</td>
+<td style="text-align: right;">1.23547</td>
+<td style="text-align: right;">0.135405</td>
+<td style="text-align: right;">0.242</td>
+<td style="text-align: right;">39.9954</td>
+<td style="text-align: right;">1.12931</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">reptans</td>
+<td style="text-align: right;">0.496727</td>
+<td style="text-align: right;">-0.235722</td>
+<td style="text-align: right;">0.242</td>
+<td style="text-align: right;">39.9954</td>
+<td style="text-align: right;">0.0194399</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: left;">reptans</td>
+<td style="text-align: right;">0.703098</td>
+<td style="text-align: right;">-0.145026</td>
+<td style="text-align: right;">0.242</td>
+<td style="text-align: right;">39.9954</td>
+<td style="text-align: right;">0.316507</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Here, the predictors (elevation and latitude) have the same value for all individuals within a species: entered as the average elevation and latiture across a much much bigger sample size for each species. The model below accounts for within-species variation in the response variable, not in the predictor variables.</p>
+<div id="255a0a34" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fit_ind <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits_indiv, net;</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                  tipnames<span class="op">=:</span>morph, withinspecies_var<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>PhyloNetworkLinearModel
+
+Formula: llength ~ 1 + elevation + lat
+
+Model: Brownian motion
+
+Parameter Estimates, using REML:
+phylogenetic variance rate: 0.538129
+within-species variance: 0.107484
+
+Coefficients:
+────────────────────────────────────────────────────────────────────────────
+                  Coef.  Std. Error      t  Pr(&gt;|t|)  Lower 95%    Upper 95%
+────────────────────────────────────────────────────────────────────────────
+(Intercept)   4.22609     1.81331     2.33    0.0352   0.336929   8.11526
+elevation    -0.585523    0.16023    -3.65    0.0026  -0.929181  -0.241865
+lat          -0.0804964   0.0391184  -2.06    0.0587  -0.164397   0.00340418
+────────────────────────────────────────────────────────────────────────────
+Log Likelihood: -332.2511620613
+AIC: 674.5023241226</code></pre>
+</div>
+</div>
+<ul>
+<li>What are the estimated variances?</li>
+<li>Did the estimated regression coefficients change much compared to the previous analysis at the species level?</li>
+<li>How about the strength of evidence that they correlate with log-leaflet-length, based on Wald-type tests?</li>
+</ul>
+</section>
+<section id="likelihood-ratio-test" class="level2">
+<h2 class="anchored" data-anchor-id="likelihood-ratio-test">likelihood ratio test</h2>
+<p>We can get p-values with a likelihood ratio test. For likelihood ratio tests, we need to use the ML criterion, not REML, to compare models with different “fixed” effects. ML tends to underestimate variances compared to REML, however.</p>
+<div id="023a86a3" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fit_ml <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits_indiv, net;</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                reml<span class="op">=</span><span class="cn">false</span>, tipnames<span class="op">=:</span>morph, withinspecies_var<span class="op">=</span><span class="cn">true</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fit_ml_nolat <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation), traits_indiv, net;</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                reml<span class="op">=</span><span class="cn">false</span>, tipnames<span class="op">=:</span>morph, withinspecies_var<span class="op">=</span><span class="cn">true</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lrtest</span>(fit_ml_nolat, fit_ml)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>Likelihood-ratio test: 2 models fitted on 954 observations
+──────────────────────────────────────────────────────
+     DOF  ΔDOF     LogLik  Deviance   Chisq  p(&gt;Chisq)
+──────────────────────────────────────────────────────
+[1]    4        -330.9506  661.9012                   
+[2]    5     1  -328.7027  657.4054  4.4958     0.0340
+──────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</section>
+<section id="within-species-variation-using-species-summaries" class="level2">
+<h2 class="anchored" data-anchor-id="within-species-variation-using-species-summaries">within-species variation using species summaries</h2>
+<p>The data we used above has 1 row per individual, which can lead to a very large data set (considering that we have 17 species):</p>
+<div id="2a10e270" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(traits_indiv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>954</code></pre>
+</div>
+</div>
+<p>and sometimes we don’t have this fine-grained individual-level information anyway. In fact, the method only needs to know the sample size, observed mean and variance of the response trait (log-leaflet-length) within each species. Let’s illustrate how to summarize our data with 1 row per species and extra columns: the number of sampled individuals, their mean and variance within each morph.</p>
+<div id="8ea8fd7a" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>num_nonmissing <span class="op">=</span> x <span class="op">-&gt;</span> <span class="fu">length</span>(.!(<span class="fu">ismissing</span>.(x)))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>traits_meanstd <span class="op">=</span> <span class="fu">combine</span>( <span class="fu">groupby</span>(traits_indiv, <span class="op">:</span>morph),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span>llength <span class="op">=&gt;</span> mean <span class="op">=&gt;</span> <span class="op">:</span>llength, <span class="co"># last term = new column name</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span>llength <span class="op">=&gt;</span> std <span class="op">=&gt;</span> <span class="op">:</span>llength_sd,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span>llength <span class="op">=&gt;</span> num_nonmissing <span class="op">=&gt;</span> <span class="op">:</span>llength_n,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span>elevation <span class="op">=&gt;</span> mean <span class="op">=&gt;</span> <span class="op">:</span>elevation,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span>lat <span class="op">=&gt;</span> mean <span class="op">=&gt;</span> <span class="op">:</span>lat</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<div><div style="float: left;"><span>17×6 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">morph</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">llength</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">llength_sd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">llength_n</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">elevation</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">lat</th>
+</tr>
+<tr class="subheader headerLastRow even">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String31">String31</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Int64">Int64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">aff._viscosum_sp._nov.</td>
+<td style="text-align: right;">-1.371</td>
+<td style="text-align: right;">0.269326</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">3.0785</td>
+<td style="text-align: right;">44.0958</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">apachianum</td>
+<td style="text-align: right;">0.289364</td>
+<td style="text-align: right;">0.304548</td>
+<td style="text-align: right;">62</td>
+<td style="text-align: right;">2.68836</td>
+<td style="text-align: right;">33.927</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">brandegeei</td>
+<td style="text-align: right;">-0.67488</td>
+<td style="text-align: right;">0.353546</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">2.7435</td>
+<td style="text-align: right;">40.0324</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: left;">carneum</td>
+<td style="text-align: right;">0.75653</td>
+<td style="text-align: right;">0.236791</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">1.008</td>
+<td style="text-align: right;">43.2211</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5</td>
+<td style="text-align: left;">chartaceum</td>
+<td style="text-align: right;">-1.61233</td>
+<td style="text-align: right;">0.156378</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">4.116</td>
+<td style="text-align: right;">37.6344</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">6</td>
+<td style="text-align: left;">confertum</td>
+<td style="text-align: right;">-0.430446</td>
+<td style="text-align: right;">0.290027</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">3.7045</td>
+<td style="text-align: right;">38.9484</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">7</td>
+<td style="text-align: left;">delicatum</td>
+<td style="text-align: right;">0.0316277</td>
+<td style="text-align: right;">0.384536</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3.307</td>
+<td style="text-align: right;">38.84</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">8</td>
+<td style="text-align: left;">eddyense</td>
+<td style="text-align: right;">-1.21937</td>
+<td style="text-align: right;">0.0652927</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2.744</td>
+<td style="text-align: right;">41.3189</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">9</td>
+<td style="text-align: left;">elegans</td>
+<td style="text-align: right;">-1.06016</td>
+<td style="text-align: right;">0.258922</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">2.287</td>
+<td style="text-align: right;">46.904</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">10</td>
+<td style="text-align: left;">elusum</td>
+<td style="text-align: right;">0.21314</td>
+<td style="text-align: right;">0.260283</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1.692</td>
+<td style="text-align: right;">44.7146</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">11</td>
+<td style="text-align: left;">foliosissimum</td>
+<td style="text-align: right;">0.622095</td>
+<td style="text-align: right;">0.315621</td>
+<td style="text-align: right;">274</td>
+<td style="text-align: right;">2.6825</td>
+<td style="text-align: right;">38.786</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">12</td>
+<td style="text-align: left;">micranthum</td>
+<td style="text-align: right;">-0.864849</td>
+<td style="text-align: right;">0.345533</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">1.128</td>
+<td style="text-align: right;">43.7447</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">13</td>
+<td style="text-align: left;">occidentale_occidentale</td>
+<td style="text-align: right;">0.542457</td>
+<td style="text-align: right;">0.39549</td>
+<td style="text-align: right;">173</td>
+<td style="text-align: right;">2.14</td>
+<td style="text-align: right;">42.5916</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">14</td>
+<td style="text-align: left;">pauciflorum</td>
+<td style="text-align: right;">0.222039</td>
+<td style="text-align: right;">0.313219</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">2.6375</td>
+<td style="text-align: right;">30.8088</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">15</td>
+<td style="text-align: left;">pectinatum</td>
+<td style="text-align: right;">0.834157</td>
+<td style="text-align: right;">0.204992</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">47.1283</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">16</td>
+<td style="text-align: left;">pulcherrimum_shastense</td>
+<td style="text-align: right;">-1.04488</td>
+<td style="text-align: right;">0.230817</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">3.17</td>
+<td style="text-align: right;">41.3842</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">17</td>
+<td style="text-align: left;">reptans</td>
+<td style="text-align: right;">0.746643</td>
+<td style="text-align: right;">0.285631</td>
+<td style="text-align: right;">49</td>
+<td style="text-align: right;">0.242</td>
+<td style="text-align: right;">39.9954</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>We can use this input data to fit our phylogenetic regression, thanks to the option <code>y_mean_std=true</code>. This format requires 3 columns for the response variable, containing:</p>
+<ul>
+<li>the mean (one row per species): <code>llength</code> in our case</li>
+<li>the standard deviation (SD, square-root of the variance) named with suffix “_sd”, <code>llength_sd</code> in our case,</li>
+<li>the sample size, that is, the number of individuals from which the mean and SDs were calculated, named with suffix “_n”, so <code>llength_n</code> in our case.</li>
+</ul>
+<p>Now we fit the model as above using our summarized dataset, except that we use option <code>y_mean_std=true</code> to let the function know about the format, and get the same results as before:</p>
+<div id="44e45505" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits_meanstd, net; <span class="co"># same result as fit_ind</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>        tipnames<span class="op">=:</span>morph, withinspecies_var<span class="op">=</span><span class="cn">true</span>, y_mean_std<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>PhyloNetworkLinearModel
+
+Formula: llength ~ 1 + elevation + lat
+
+Model: Brownian motion
+
+Parameter Estimates, using REML:
+phylogenetic variance rate: 0.538129
+within-species variance: 0.107484
+
+Coefficients:
+────────────────────────────────────────────────────────────────────────────
+                  Coef.  Std. Error      t  Pr(&gt;|t|)  Lower 95%    Upper 95%
+────────────────────────────────────────────────────────────────────────────
+(Intercept)   4.22609     1.81331     2.33    0.0352   0.336929   8.11526
+elevation    -0.585523    0.16023    -3.65    0.0026  -0.929181  -0.241865
+lat          -0.0804964   0.0391184  -2.06    0.0587  -0.164397   0.00340418
+────────────────────────────────────────────────────────────────────────────
+Log Likelihood: -332.2511620613
+AIC: 674.5023241226</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/juliaphylo\.github\.io\/networkPCM-tutorial");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./topic4-netcalibration.html" class="pagination-link" aria-label="Network calibration">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Network calibration</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./topic6-asr.html" class="pagination-link" aria-label="Ancestral state reconstruction">
+        <span class="nav-page-text">Ancestral state reconstruction</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/JuliaPhylo/networkPCM-tutorial/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
