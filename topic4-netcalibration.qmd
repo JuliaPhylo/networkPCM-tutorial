@@ -19,7 +19,7 @@ using StatsBase, StatsModels
 We first read the network, as shown in the 'getting started' section.
 In that section,
 the [figure](topic2-getstarted.qmd#fig-0-netsnaq) shows that the network needs
-to be rooted correctely, is missing some edge lengths, and
+to be rooted correctly, is missing some edge lengths, and
 that current edge lengths are in coalescent units.
 These units are expected to correlate poorly with time, because the number of
 generations per year can vary significantly between species,
