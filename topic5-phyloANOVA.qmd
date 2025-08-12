@@ -47,7 +47,7 @@ first(traits_morph, 4)
 ```
 
 Taxon names are in the column "morph", but don't match exactly with the
-names in the network ---somethign quite typical.
+names in the network ---something quite typical.
 
 ```{julia}
 setdiff(tiplabels(net), traits_morph.morph) # names in the network but not in trait df
@@ -76,15 +76,15 @@ subset!(traits_morph, :morph => ByRow(in(tiplabels(net))))
 
 ## phylogenetic regression
 
-Let's fit our model: a Browian motion by default.
+Let's fit our model: a Brownian motion by default.
 The output shows the estimated parameters,
 confidence intervals for the regression coefficients, and other summary.
 
 Functions for trait evolution are in package
 [PhyloTraits](https://juliaphylo.github.io/PhyloTraits.jl/stable/),
 so we load if first.
-We will also need to load package using StatsModels,
-for definting statistical model formulas.
+We will also need to load package `StatsModels`,
+for defining statistical model formulas.
 
 ```{julia}
 using PhyloTraits, StatsModels

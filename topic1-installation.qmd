@@ -63,14 +63,16 @@ from the tutorial directory (cloned or downloaded earlier)
 to make it easier to use this directory as a julia environment.
 
 Then within julia, install
-[PhyloNetworks](https://juliaphylo.github.io/PhyloNetworks.jl/v0.16/man/installation/)
-v0.16 (see below to install this particular version).
+[PhyloNetworks](https://juliaphylo.github.io/PhyloNetworks.jl/stable/man/installation/).
 Also install other packages, including:
 [PhyloPlots](https://juliaphylo.github.io/PhyloPlots.jl/stable/man/installation/#Installation).
 For this, we suggest using the environment provided in this tutorial,
 which consists of the two `.toml` files that lists which packages to install
 (in `Project.toml`) and which versions exactly (in `Manifest.toml`).
-These installations will not interfere with other ways you might be using julia.
+These installations will not interfere with other ways you might be using julia,
+and will install the exact versions of the packages used while writing this tutorial 
+(see the [readme](https://github.com/JuliaPhylo/networkPCM-tutorial?tab=readme-ov-file) file
+of the GitHub repository).
 Here is how:
 
 - type `]` to switch to package mode
@@ -91,8 +93,8 @@ Then type this:
 add CSV, CategoricalArrays, DataFrames
 add Distributions, StatsBase, StatsModels
 add RCall
-add PhyloNetworks@0.16.4
-add PhyloPlots # do this after adding PhyloNetworks v0.16, to install a compatible version
+add PhyloNetworks
+add PhyloPlots # do this after adding PhyloNetworks, to install a compatible version
 ```
 Installation may take a while, especially if internet is slow.
 

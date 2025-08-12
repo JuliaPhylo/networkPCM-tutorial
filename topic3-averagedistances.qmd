@@ -42,10 +42,12 @@ of fast-evolving genes, and rate variation across genes more generally.
 
 We first load [helper functions](https://github.com/JuliaPhylo/PhyloUtilities/blob/main/scripts/averagetaxondistances.jl)
 for computing pairwise distances, to
+
 - get a matrix of pairwise distances from each tree
 - normalize these distance matrices, so they all have a similar distance between
   the ingroup and outgroup taxa
 - average distance matrices across genes.
+
 These functions were originally developed by [Karimi et al. (2020)](https://doi.org/10.1093/sysbio/syz073).
 To load them, do this below within your julia session:
 ```{julia}
