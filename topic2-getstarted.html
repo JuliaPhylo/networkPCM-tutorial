@@ -449,7 +449,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="load-packages-and-get-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-packages-and-get-the-data">load packages and get the data</h2>
 <p>Load the packages we will use:</p>
-<div id="46b15e94" class="cell" data-execution_count="1">
+<div id="645ce994" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>               <span class="co"># read/write CSV and similar formats</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>        <span class="co"># versatile tabular data format</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">PhyloNetworks</span>     <span class="co"># includes many utilities</span></span>
@@ -484,7 +484,7 @@ Figure&nbsp;1: Polemonium network topology from SNaQ: needs rooting, branch leng
 </div>
 </div>
 <p>then the trait data</p>
-<div id="ff74cd07" class="cell" data-execution_count="3">
+<div id="adaab4c6" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>traits_indiv <span class="op">=</span> CSV.<span class="fu">File</span>(<span class="st">"data/polemonium_traits_individual.csv"</span>) <span class="op">|&gt;</span> DataFrame</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">size</span>(traits_indiv) <span class="co"># number of rows and number of columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">

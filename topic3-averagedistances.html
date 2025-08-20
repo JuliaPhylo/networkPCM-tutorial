@@ -439,7 +439,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div id="50637147" class="cell" data-execution_count="1">
+<div id="ac8b6391" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code from prior sections: load packages used here</span></span>
@@ -451,8 +451,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We want these lengths to represent substitutions/site observed in data, so this section show how to estimate genetic distances from gene trees. These genetic distances are used in the next section to <a href="./topic4-netcalibration.html#input-genetic-distances">calibrate</a> a network.</p>
 <p>Using gene trees from multiple loci may be best when loci are sufficiently informative. With short loci or with loci with few informative sites, some branch lengths may often be underestimated at 0 due to a lack of variable sites, in which case it may be best to estimate genetic distances from the multiple alignment directly.</p>
 <p>If loci are sufficiently informative, estimating a gene tree from each locus may help reduce noise in the estimated distances (e.g.&nbsp;account for multiple substitutions along the same lineage). It can also decrease the influence of fast-evolving genes, and rate variation across genes more generally.</p>
-<p>We first load <a href="https://github.com/JuliaPhylo/PhyloUtilities/blob/main/scripts/averagetaxondistances.jl">helper functions</a> for computing pairwise distances, to - get a matrix of pairwise distances from each tree - normalize these distance matrices, so they all have a similar distance between the ingroup and outgroup taxa - average distance matrices across genes. These functions were originally developed by <a href="https://doi.org/10.1093/sysbio/syz073">Karimi et al.&nbsp;(2020)</a>. To load them, do this below within your julia session:</p>
-<div id="b56e7a55" class="cell" data-execution_count="2">
+<p>We first load <a href="https://github.com/JuliaPhylo/PhyloUtilities/blob/main/scripts/averagetaxondistances.jl">helper functions</a> for computing pairwise distances, to</p>
+<ul>
+<li>get a matrix of pairwise distances from each tree</li>
+<li>normalize these distance matrices, so they all have a similar distance between the ingroup and outgroup taxa</li>
+<li>average distance matrices across genes.</li>
+</ul>
+<p>These functions were originally developed by <a href="https://doi.org/10.1093/sysbio/syz073">Karimi et al.&nbsp;(2020)</a>. To load them, do this below within your julia session:</p>
+<div id="119a7956" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="fu">download</span>(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://raw.githubusercontent.com/JuliaPhylo/PhyloUtilities/refs/heads/main/scripts/averagetaxondistances.jl"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -460,7 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>(or copy &amp; paste <a href="https://github.com/JuliaPhylo/PhyloUtilities/blob/main/scripts/averagetaxondistances.jl">them</a>)</p>
 <p>This tutorial comes with a small sample of gene trees, some of them modified so as to illustrate the case when taxa are missing from some genes. These gene tree files are in folder <code>data/genetrees_sample</code>, and are majority-rule consensus trees in nexus format created by MrBayes. This is only to give example code to read gene tree files and calculate distances. In practice, the majority-rule creates edges of length 0 (polytomies) when there is less than 50% credibility for a resolution in the gene tree, so this is underestimating the true edge length, and a full consensus tree may be a better option.</p>
 <p>Below, we show how to read these files using <code>readnexus_treeblock</code> because of the nexus format. This function is meant to read a sample of multiple trees (or multiple networks), so it returns a list. We only use the first and only tree in this list. As we can see, loci L10 and L20 are missing a few taxa.</p>
-<div id="80867000" class="cell" data-execution_count="3">
+<div id="1cf50ad7" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>genetreefolder <span class="op">=</span> <span class="fu">joinpath</span>(<span class="st">"data"</span>,<span class="st">"genetrees_sample"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># list the content of this folder, and filter to keep files ending in ".tre":</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>genetreefiles <span class="op">=</span> <span class="fu">filter</span>(x <span class="op">-&gt;</span> <span class="fu">endswith</span>(x,<span class="st">".tre"</span>), <span class="fu">readdir</span>(genetreefolder))</span>
@@ -496,7 +502,7 @@ T405_L29.nex.con.tre: 17 taxa</code></pre>
 </div>
 </div>
 <p>To convert each tree to a matrix of pairwise distances, we first need to decide the order in which the taxa should be listed.</p>
-<div id="22c7552d" class="cell" data-execution_count="4">
+<div id="571fa624" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>taxa_long <span class="op">=</span> <span class="fu">sort!</span>(<span class="fu">union</span>(<span class="fu">tiplabels</span>.(genetrees)<span class="op">...</span>))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>D, ngenes, geneind <span class="op">=</span> <span class="fu">getpairwisedistances</span>(genetrees, taxa_long);</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>geneind <span class="co"># indices of genes with some missing taxa</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -506,7 +512,7 @@ T405_L29.nex.con.tre: 17 taxa</code></pre>
  11</code></pre>
 </div>
 </div>
-<div id="276c6027" class="cell" data-execution_count="5">
+<div id="4837f53b" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ngenes <span class="co"># number of genes with data for each pair: 19 for most, some 17's and 18's</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>17×17 Matrix{Int64}:
@@ -529,7 +535,7 @@ T405_L29.nex.con.tre: 17 taxa</code></pre>
  19  19  19  19  19  19  19  17  18  19  19  19  18  19  19  19  19</code></pre>
 </div>
 </div>
-<div id="537150d6" class="cell" data-execution_count="6">
+<div id="66912b45" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>D[<span class="fl">11</span>] <span class="co"># distance matrix from 11th gene in the list. if missing taxa, then 0s</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>17×17 Matrix{Float64}:
@@ -554,7 +560,7 @@ T405_L29.nex.con.tre: 17 taxa</code></pre>
 </div>
 <p>Now we want to rescale each distance matrix so as to limit the impact of rate variation across genes. Otherwise, fast-evolving genes would overwhelm the signal, which may be particularly dangerous if these fast-evolving genes have saturated edge lengths or are affected by long-branch attraction.</p>
 <p>For normalizing the median distance between all pairs of ingroup-outgroup taxa, we define these sets of taxa:</p>
-<div id="6057c76c" class="cell" data-execution_count="7">
+<div id="a58fe88a" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>outgroup <span class="op">=</span> <span class="fu">filter</span>(x <span class="op">-&gt;</span> <span class="fu">occursin</span>(<span class="st">"micranthum"</span>,x), taxa_long)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ingroup <span class="op">=</span> <span class="fu">setdiff</span>(taxa_long, outgroup)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>med_in2out <span class="op">=</span> <span class="fu">normalizedistances_outgroup2ingroup!</span>(D,</span>
@@ -584,7 +590,7 @@ T405_L29.nex.con.tre: 17 taxa</code></pre>
 </div>
 </div>
 <p>We can see that all genes had somewhat similar rates, because similar median ingroup-to-outgroup distances, except for gene 15, that had a particularly smaller rate than others. If there is reason to think that slow-evolving genes may need to be removed, a filtering step could be added at this point. For the sake of providing example code, we do this here.</p>
-<div id="b90c2896" class="cell" data-execution_count="8">
+<div id="68eaab0a" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>slowgene_indices <span class="op">=</span> <span class="fu">findall</span>(d <span class="op">-&gt;</span> d <span class="op">&lt;</span> <span class="fl">0.003</span>, med_in2out) <span class="co"># gene 15 here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>1-element Vector{Int64}:
@@ -592,7 +598,7 @@ T405_L29.nex.con.tre: 17 taxa</code></pre>
 </div>
 </div>
 <p>Gene 15 was not missing any taxa: <code>geneind</code> did not list that gene. So we don’t have to re-run the calculation of the vector of D matrix and of the matrix storing the number of genes contributing data for each pair of taxa. Otherwise, we would need to re-run the calculation of <code>ngenes</code>.</p>
-<div id="bd250a6a" class="cell" data-execution_count="9">
+<div id="67d7f0c7" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">deleteat!</span>(D, slowgene_indices); <span class="co"># deletes D[k] for a slow gene k</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>num_slow <span class="op">=</span> <span class="fu">length</span>(slowgene_indices) <span class="co"># 1: number of slow genes that are being exluded</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>ngenes <span class="op">.-=</span> num_slow <span class="co"># gene 15 was not missing any taxa</span></span>
@@ -602,7 +608,7 @@ T405_L29.nex.con.tre: 17 taxa</code></pre>
 </div>
 </div>
 <p>Now we can see how the distance matrix changed for the first gene, which we looked at earlier:</p>
-<div id="9d33eb05" class="cell" data-execution_count="10">
+<div id="93331de5" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>D[<span class="fl">11</span>] <span class="co"># from 11th gene, after normalization. 0s on rows &amp; columns for missing taxa</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>17×17 Matrix{Float64}:
@@ -626,7 +632,7 @@ T405_L29.nex.con.tre: 17 taxa</code></pre>
 </div>
 </div>
 <p>Finally, let’s average distances across genes</p>
-<div id="41ea77ca" class="cell" data-execution_count="11">
+<div id="6db012dd" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>avD <span class="op">=</span> <span class="fu">averagepairwisedistances</span>(D, ngenes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>17×17 Matrix{Float64}:
@@ -650,7 +656,7 @@ T405_L29.nex.con.tre: 17 taxa</code></pre>
 </div>
 </div>
 <p>and save this average distance matrix to a file:</p>
-<div id="4e9d1cb3" class="cell" data-execution_count="12">
+<div id="5f11c7c4" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>csv_filename <span class="op">=</span> <span class="fu">joinpath</span>(genetreefolder, <span class="st">"averagedist_sample.csv"</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>avD_df <span class="op">=</span> <span class="fu">DataFrame</span>([avD[<span class="op">:</span>,j] for j <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">size</span>(avD,<span class="fl">2</span>)], <span class="co"># column data</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                   [<span class="fu">Symbol</span>(t) for t <span class="kw">in</span> taxa_long])    <span class="co"># column names</span></span>

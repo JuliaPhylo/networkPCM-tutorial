@@ -450,7 +450,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div id="1e2ee89e" class="cell" data-execution_count="1">
+<div id="83e07433" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code from prior sections</span></span>
@@ -461,7 +461,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <p>We load the data at the species (morph) level and focus on log-leaflet-length, without any predictor to predict ancestral states:</p>
-<div id="95370333" class="cell" data-execution_count="2">
+<div id="9c7eb7ce" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>traits <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"data/polemonium_traits_morph.csv"</span>, DataFrame)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">subset!</span>(traits, <span class="op">:</span>morph <span class="op">=&gt;</span> <span class="fu">ByRow</span>(<span class="fu">in</span>(<span class="fu">tiplabels</span>(net)))) <span class="co"># subset of rows</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> <span class="fl">1</span>), traits, net; tipnames<span class="op">=:</span>morph,</span>
@@ -491,7 +491,7 @@ AIC: 674.8531894983</code></pre>
 <section id="predict-ancestral-states" class="level2">
 <h2 class="anchored" data-anchor-id="predict-ancestral-states">predict ancestral states</h2>
 <p>This is typically called “ancestral state reconstruction” but prediction seems a more accurate term. This technique estimates the mean of nodes in the network: ancestral or extant species, conditional on the data. It’s important to look at prediction intervals, not just a “point” estimate.</p>
-<div id="f484d61b" class="cell" data-execution_count="3">
+<div id="d3acf673" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>asr <span class="op">=</span> <span class="fu">ancestralreconstruction</span>(fit)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>asr_pred <span class="op">=</span> <span class="fu">predict</span>(asr) <span class="co"># predictions at all nodes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
@@ -646,7 +646,7 @@ AIC: 674.8531894983</code></pre>
 </div>
 </div>
 <p>This output is somewhat cryptic though, because each row refers to a node number and it’s unclear which are tips, which are internal nodes, and which node has what number. We can also get prediction intervals (sometimes called confidence intervals) but with the same cryptic ordering of nodes:</p>
-<div id="513bf84c" class="cell" data-execution_count="4">
+<div id="26ece4cf" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>asr_pred_int <span class="op">=</span> <span class="fu">predict</span>(asr, interval <span class="op">=</span> <span class="op">:</span>prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <div><div style="float: left;"><span>39×4 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">14 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
@@ -859,7 +859,7 @@ AIC: 674.8531894983</code></pre>
 <section id="extant-species" class="level2">
 <h2 class="anchored" data-anchor-id="extant-species">extant species</h2>
 <p>First, we build a data frame to get this information in a more interpretable format for the tips. Below is one way to map the morph names in the order in which they appear in the data, to node numbers in the network:</p>
-<div id="bd4a0c84" class="cell" data-execution_count="5">
+<div id="9457d1d6" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tipnames_trait <span class="op">=</span> traits.morph</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">get_morph_nodenumber</span>(label)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  i <span class="op">=</span> <span class="fu">findfirst</span>(n <span class="op">-&gt;</span> n.name <span class="op">==</span> label, net.node)</span>
@@ -889,7 +889,7 @@ AIC: 674.8531894983</code></pre>
 </div>
 </div>
 <p>With this mapping, we can replace the node numbers by the morph names, and add other information from the trait data such as the sample size for each morph:</p>
-<div id="9fedf45d" class="cell" data-execution_count="6">
+<div id="40dd013c" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tipindex_asr <span class="op">=</span> <span class="fu">indexin</span>(tipnumber, asr_pred.nodenumber)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>res_tip <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>      morph     <span class="op">=</span> tipnames_trait, <span class="co"># morph names, ordered as in trait data frame</span></span>
@@ -1082,7 +1082,7 @@ AIC: 674.8531894983</code></pre>
 </div>
 </div>
 <p>The predicted species means are close, but not exactly equal, to the observed means in each sample. This is because phylogenetic relatedness is used to share information across species. Little is shared for species with a large sample size, such as foliosissimum. But for species with a small sample size, such as eddyense, more information is borrowed from closely-related species. This is highlighted below:</p>
-<div id="2ec949af" class="cell" data-execution_count="7">
+<div id="4bba4218" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(<span class="op">:</span>morph <span class="op">=&gt;</span> n <span class="op">-&gt;</span> n <span class="kw">in</span> [<span class="st">"eddyense"</span>,<span class="st">"foliosissimum"</span>], res_tip)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <div><div style="float: left;"><span>2×6 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
@@ -1135,7 +1135,7 @@ AIC: 674.8531894983</code></pre>
 <section id="ancestral-nodes" class="level2">
 <h2 class="anchored" data-anchor-id="ancestral-nodes">ancestral nodes</h2>
 <p>To look at ancestral states, it’s best to map the predictions and intervals onto the network. To do so, we will build a data frame containing annotations to be placed at nodes, then plot the network with this data frame as argument.</p>
-<div id="926e708f" class="cell" data-execution_count="8">
+<div id="94f8010a" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>nodepred <span class="op">=</span> <span class="fu">predict</span>(asr, text<span class="op">=</span><span class="cn">true</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(nodepred, <span class="fl">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
@@ -1196,7 +1196,7 @@ Figure&nbsp;1: ancestral state reconstruction: species means conditional on data
 </div>
 </div>
 </div>
-<div id="4c7467b8" class="cell" data-execution_count="10">
+<div id="0cfe88a8" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nodeint <span class="op">=</span> <span class="fu">predict</span>(asr, interval<span class="op">=:</span>prediction, text<span class="op">=</span><span class="cn">true</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(nodeint, <span class="fl">4</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">select!</span>(nodeint, [<span class="op">:</span>nodenumber,<span class="op">:</span>interval]); <span class="co"># select columns used for plot later</span></span>

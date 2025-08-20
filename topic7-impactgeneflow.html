@@ -449,7 +449,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div id="c3b35f33" class="cell" data-execution_count="1">
+<div id="2c4a65b9" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code from prior sections</span></span>
@@ -482,7 +482,7 @@ Figure&nbsp;1: major tree, drawn proportional to edge lengths
 </div>
 </div>
 </div>
-<div id="1e366da6" class="cell" data-execution_count="3">
+<div id="ce3789bf" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fit_net <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits, net;</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                  tipnames<span class="op">=:</span>morph, withinspecies_var<span class="op">=</span><span class="cn">true</span>, y_mean_std<span class="op">=</span><span class="cn">true</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fit_tree <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits, tree;</span>
@@ -495,7 +495,7 @@ Figure&nbsp;1: major tree, drawn proportional to edge lengths
 <p>Which model seems to fit best: network or major tree?</p>
 <p>Note that this network-vs-tree question applies to the phylogenetic correlation of <em>residuals</em> here. It could be gene flow had an impact on the geographic distribution at reticulations, which impacted evelation and latitude. In that case, this impact would be explained by the predictors that we used, and would not be seen here. But it could appear from a model without any predictors (something you could run if interested).</p>
 <p>We can check to see how much of a difference it makes on coefficients:</p>
-<div id="109d29d2" class="cell" data-execution_count="4">
+<div id="8e87d7e0" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftable</span>(fit_net)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display cell-output-markdown" data-execution_count="5">
 <table class="caption-top table table-sm table-striped small">
@@ -551,7 +551,7 @@ Figure&nbsp;1: major tree, drawn proportional to edge lengths
 </table>
 </div>
 </div>
-<div id="e6976621" class="cell" data-execution_count="5">
+<div id="3245820f" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftable</span>(fit_tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display cell-output-markdown" data-execution_count="6">
 <table class="caption-top table table-sm table-striped small">
@@ -608,20 +608,20 @@ Figure&nbsp;1: major tree, drawn proportional to edge lengths
 </div>
 </div>
 <p>or how much difference it makes on the estimated variance parameters:</p>
-<div id="7a0d04ed" class="cell" data-execution_count="6">
+<div id="0e0b08cd" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>.((<span class="fu">sigma2_phylo</span>(fit_net), <span class="fu">sigma2_phylo</span>(fit_tree)), sigdigits<span class="op">=</span><span class="fl">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>(0.5381, 0.5319)</code></pre>
 </div>
 </div>
-<div id="daabcdcc" class="cell" data-execution_count="7">
+<div id="3d37eeef" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>.((<span class="fu">sigma2_within</span>(fit_net), <span class="fu">sigma2_within</span>(fit_tree)), sigdigits<span class="op">=</span><span class="fl">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>(0.1075, 0.1075)</code></pre>
 </div>
 </div>
 <p>Out of curiousity, we can do this again with the most “minor” tree: where major hybrid edges are deleted and all minor hybrid edges are kept.</p>
-<div id="5e50ba97" class="cell" data-execution_count="8">
+<div id="641d9d6d" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>minortree <span class="op">=</span> <span class="fu">deepcopy</span>(net);</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> minortree.numhybrids <span class="op">&gt;</span> <span class="fl">0</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="cn">e</span> <span class="kw">in</span> minortree.edge</span>
@@ -644,7 +644,7 @@ Figure&nbsp;1: major tree, drawn proportional to edge lengths
 <h2 class="anchored" data-anchor-id="transgressive-evolution-at-reticulations">transgressive evolution at reticulations</h2>
 <p>Another question we may ask is whether the trait at reticulations deviates from the weighted average of its parent populations (immediately before gene flow). Such would be the case if a hybrid species’s trait is outside the range of its parents. This “transgressive” evolution can be modelled with a shift in the trait along the edge just below the reticulation. This shift quantifies the difference between the trait at the hybrid node and the weighted average of the immediate parents.</p>
 <p>The code below builds a data frame with 1 predictor column per reticulation: this column quantifies the effect of a transgressive shift on each taxon in the phylogeny.</p>
-<div id="3f9a24d6" class="cell" data-execution_count="9">
+<div id="190c218a" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df_shift <span class="op">=</span> <span class="fu">descendencedataframe</span>(net)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <div><div style="float: left;"><span>17×5 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
@@ -812,7 +812,7 @@ Figure&nbsp;1: major tree, drawn proportional to edge lengths
 <p>To know which shift corresponds to which reticulation, we could plot the network and ask to see the edge numbers, as shown below.</p>
 <p>But the data frame shows us which tips are impacted by each reticulation: - transgressive shift on edge 8: reticulation leading to delicatum and pulcherrimum_shastense, - shift on edge 18: below reticulation leading to elusum - shift on edge 25: below reticulation leading to apachianum. The values in this data frame are the proportion of the genome that each species inherited from the reticulation, based on the network’s γ values. In our case, they are only 0 or 1, but the values could be in between on more complex networks, especially for older reticulations if they were followed by later reticulations.</p>
 <p>Now we can combine our trait data and the new columns that can serve as predictors to model transgressive evolution:</p>
-<div id="4d0dbabf" class="cell" data-execution_count="11">
+<div id="d24019b6" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> <span class="fu">innerjoin</span>(<span class="fu">select</span>(traits, <span class="op">:</span>morph, <span class="st">r"llength"</span>, <span class="op">:</span>elevation, <span class="op">:</span>lat),</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>               <span class="fu">select</span>(df_shift, <span class="fu">Not</span>(<span class="op">:</span>sum)), <span class="co"># excludes the 'sum' column</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>               on <span class="op">=</span> <span class="op">:</span>morph <span class="op">=&gt;</span> <span class="op">:</span>tipnames) <span class="co"># join our data with shift predictors</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1056,7 +1056,7 @@ Figure&nbsp;1: major tree, drawn proportional to edge lengths
 </div>
 </div>
 <p>If we had a particular interest in the reticulation ancestral to the delicatum + pulcherrimum clade, we could look for evidence of transgressive evolution at that reticulation like this (in leaflet length itself, including any effect correlated with latitude and elevation):</p>
-<div id="eb17839d" class="cell" data-execution_count="12">
+<div id="ba78bd6c" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fit_noshift <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> <span class="fl">1</span>), df, net, tipnames<span class="op">=:</span>morph,</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>          withinspecies_var<span class="op">=</span><span class="cn">true</span>, y_mean_std<span class="op">=</span><span class="cn">true</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># using `df` for both, so the no-shift model is recognized as nested in the shifted model</span></span>
@@ -1069,7 +1069,7 @@ Figure&nbsp;1: major tree, drawn proportional to edge lengths
 </div>
 </div>
 <p>Note that we fitted the no-shift model with the same data <code>df</code> as the shifted model. The taxa are listed in a different order in <code>df</code> and in the original <code>traits</code> data frame. It helps to use the same data frame for later comparisons. For example, we could run a likelihood ratio test (<code>lrtest</code>) to compare the two models, altough that we requires re-fitting them with ML method instead of the default REML:</p>
-<div id="0e4b1c7c" class="cell" data-execution_count="13">
+<div id="349b00cc" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fit_noshift_ML <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> <span class="fl">1</span>), df, net, tipnames<span class="op">=:</span>morph,</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>          reml<span class="op">=</span><span class="cn">false</span>, withinspecies_var<span class="op">=</span><span class="cn">true</span>, y_mean_std<span class="op">=</span><span class="cn">true</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>fit_sh8_ML <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> shift_8), df, net, tipnames<span class="op">=:</span>morph,</span>

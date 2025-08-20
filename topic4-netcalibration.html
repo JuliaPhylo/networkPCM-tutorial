@@ -452,7 +452,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>If not done during the session before, load necessary packages</p>
-<div id="6d16079f" class="cell" data-execution_count="1">
+<div id="0b3e282f" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>               <span class="co"># read/write CSV and similar formats</span></span>
@@ -465,9 +465,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="input-network" class="level2">
 <h2 class="anchored" data-anchor-id="input-network">input network</h2>
-<p>We first read the network, as shown in the ‘getting started’ section. In that section, the <a href="./topic2-getstarted.html#fig-0-netsnaq">figure</a> shows that the network needs to be rooted correctely, is missing some edge lengths, and that current edge lengths are in coalescent units. These units are expected to correlate poorly with time, because the number of generations per year can vary significantly between species, and the effective population size can also vary greatly across time species (e.g.&nbsp;bottlenecks at speciation or reticulations) and across species.</p>
+<p>We first read the network, as shown in the ‘getting started’ section. In that section, the <a href="./topic2-getstarted.html#fig-0-netsnaq">figure</a> shows that the network needs to be rooted correctly, is missing some edge lengths, and that current edge lengths are in coalescent units. These units are expected to correlate poorly with time, because the number of generations per year can vary significantly between species, and the effective population size can also vary greatly across time species (e.g.&nbsp;bottlenecks at speciation or reticulations) and across species.</p>
 <p>Below, the calibration method will ignore these branch lengths in coalescent units and use genetic distances instead, in average number of substitutions/site (averaged across genes).</p>
-<div id="25432fbf" class="cell" data-execution_count="2">
+<div id="08123e92" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>net_snaq <span class="op">=</span> <span class="fu">readnewick</span>(<span class="st">"data/polemonium_network_fromSNaQ.phy"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tiplabels</span>(net_snaq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
@@ -492,7 +492,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Before moving on, let’s simplify taxon names. We have a file that gives the correspondence between tip names in the network to “morph” names in the trait data:</p>
-<div id="42d95cb4" class="cell" data-execution_count="3">
+<div id="9506b356" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>namemap <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"data/tip_to_morph.csv"</span>, DataFrame);</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(namemap, <span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
@@ -542,7 +542,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Let’s build a dictionary to make it easier to do the mapping:</p>
-<div id="a3e4d5e3" class="cell" data-execution_count="4">
+<div id="7ec29097" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tip2morph <span class="op">=</span> <span class="fu">Dict</span>(r[<span class="op">:</span>tip] <span class="op">=&gt;</span> r[<span class="op">:</span>morph] <span class="cf">for</span> r <span class="kw">in</span> <span class="fu">eachrow</span>(namemap))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>Dict{String, String31} with 45 entries:
@@ -628,7 +628,7 @@ Figure&nbsp;1: Polemonium network: rooted
 <h2 class="anchored" data-anchor-id="input-genetic-distances">input genetic distances</h2>
 <p>To calibrate the network, we need genetic distances estimated between each pair of taxa. The calibration will find edge lengths in the network to match as best as possible these input pairwise distances between taxa.</p>
 <p>These distances were obtained by estimating a gene tree for each gene, rescaling the gene trees to decrease rate variation across genes, extracting the pairwise distances from each rescaled gene tree, then average the pairwise distances across genes (as shown <a href="./topic3-averagedistances.html">previously</a> on a small sample of genes). The results (using all genes) were saved in file <code>data/polemonium_geneticpairwisedistances.csv</code>, which we read below.</p>
-<div id="0815fe7e" class="cell" data-execution_count="6">
+<div id="d2df33bb" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>avD <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"data/polemonium_geneticpairwisedistances.csv"</span>, DataFrame);</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>taxa_long <span class="op">=</span> <span class="fu">names</span>(avD) <span class="co"># column names</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>taxa <span class="op">=</span> [tip2morph[name] for name <span class="kw">in</span> taxa_long]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -654,7 +654,7 @@ Figure&nbsp;1: Polemonium network: rooted
 </div>
 </div>
 <p>The order in which taxa appear in the matrix is important, which is why we extracted the taxa (ordered) from the column names.</p>
-<div id="c65b4500" class="cell" data-execution_count="7">
+<div id="7449c181" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>avD <span class="op">=</span> <span class="fu">Matrix</span>(avD) <span class="co"># converting to a matrix removes column names</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>avD <span class="op">|&gt;</span> maximum <span class="co"># max distance: ≈ 0.038 substitutions/site, averaged across genes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
@@ -665,7 +665,7 @@ Figure&nbsp;1: Polemonium network: rooted
 <section id="run-the-calibration" class="level2">
 <h2 class="anchored" data-anchor-id="run-the-calibration">run the calibration</h2>
 <p>We now have the 2 necessary inputs: the network and the pairwise distances. Below, we copy the network into a new network, whose edge lengths will be modified during calibration. We first set all edge lengths to some reasonable starting value, e.g.&nbsp;the maximum genetic pairwise distance divided by the number of taxa.</p>
-<div id="8c7531a9" class="cell" data-execution_count="8">
+<div id="2cf664dd" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>net <span class="op">=</span> <span class="fu">deepcopy</span>(net_snaq)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># modify branch lengths for good starting values: 0.03807 max distance / 17 taxa ≈ 0.002</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="cn">e</span> <span class="kw">in</span> net.edge</span>
@@ -673,7 +673,7 @@ Figure&nbsp;1: Polemonium network: rooted
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We are ready to run the calibration. Its optimization criterion is the sum of squares between the observed distances, and the distances expected from the network (weighted average of tree distances, weighted by γ’s). The calibration function modifies the network’s edge lengths directly. Below, we run the calibration 3 times to make sure branch lengths are optimized thoroughly (each one is very fast).</p>
-<div id="01ed3444" class="cell" data-execution_count="9">
+<div id="08a95f7e" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Random;</span> Random.seed!(8732) <span class="co"># for reproducibility: you can pick any other seed</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fmin, xmin, ret <span class="op">=</span> <span class="fu">calibratefrompairwisedistances!</span>(net, avD, taxa,</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        forceMinorLength0<span class="op">=</span><span class="cn">false</span>, NLoptMethod<span class="op">=:</span>LD_MMA);</span>
@@ -682,7 +682,7 @@ Figure&nbsp;1: Polemonium network: rooted
 <pre><code>(0.00018470183899352304, :FTOL_REACHED)</code></pre>
 </div>
 </div>
-<div id="a6175571" class="cell" data-execution_count="10">
+<div id="1af5f477" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fmin, xmin, ret <span class="op">=</span> <span class="fu">calibratefrompairwisedistances!</span>(net, avD, taxa,</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>        forceMinorLength0<span class="op">=</span><span class="cn">false</span>, NLoptMethod<span class="op">=:</span>LN_COBYLA);</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>fmin, ret <span class="co"># if fmin increased slightly: score got worse</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -690,7 +690,7 @@ Figure&nbsp;1: Polemonium network: rooted
 <pre><code>(0.00018617396017517004, :MAXEVAL_REACHED)</code></pre>
 </div>
 </div>
-<div id="40f63e45" class="cell" data-execution_count="11">
+<div id="8f2284ef" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fmin, xmin, ret <span class="op">=</span> <span class="fu">calibratefrompairwisedistances!</span>(net, avD, taxa,</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>        forceMinorLength0<span class="op">=</span><span class="cn">false</span>, NLoptMethod<span class="op">=:</span>LD_MMA);</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>fmin, ret </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -699,7 +699,7 @@ Figure&nbsp;1: Polemonium network: rooted
 </div>
 </div>
 <p>Let’s check the estimated edge lengths, in units of substitutions/site for now (as were pairwise distances). We see that there are edges with tiny lengths (e.g.&nbsp;&lt; 1e-5), and a few edges with tiny negative lengths.</p>
-<div id="0dc438b0" class="cell" data-execution_count="12">
+<div id="1d93ab3a" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort!</span>([<span class="cn">e</span>.length for <span class="cn">e</span> <span class="kw">in</span> net.edge])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>41-element Vector{Float64}:
@@ -732,7 +732,7 @@ Figure&nbsp;1: Polemonium network: rooted
 </div>
 </div>
 <p>Let’s replace any negative edge lengths with 0:</p>
-<div id="270b3962" class="cell" data-execution_count="13">
+<div id="f15c08c5" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="cn">e</span> <span class="kw">in</span> net.edge</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="cn">e</span>.length <span class="op">&lt;</span> <span class="fl">0</span> <span class="cn">e</span>.length <span class="op">=</span> <span class="fl">0</span>; <span class="cf">end</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -804,7 +804,7 @@ Figure&nbsp;3: Polemonium network: after calibration and normalization to height
 </figure>
 </div>
 <p>Finally, let’s save our calibrated network to a file:</p>
-<div id="0314b00b" class="cell" data-execution_count="16">
+<div id="8fa80396" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writenewick</span>(net,<span class="st">"data/polemonium_network_calibrated.phy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 

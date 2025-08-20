@@ -452,7 +452,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div id="e5e9d288" class="cell" data-execution_count="1">
+<div id="cc50548a" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code from prior sections</span></span>
@@ -472,13 +472,13 @@ For this tutorial, we will focus on leaflet length (log-transformed) for the res
 <li>possible predictors: elevation and latitude.</li>
 </ul>
 <p>We will use our calibrated network. If you did not run the previous section or started a new julia session, we can read this network from file:</p>
-<div id="c1f17217" class="cell" data-execution_count="2">
+<div id="1adb140d" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>net <span class="op">=</span> <span class="fu">readnewick</span>(<span class="st">"data/polemonium_network_calibrated.phy"</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="match-taxon-names" class="level2">
 <h2 class="anchored" data-anchor-id="match-taxon-names">match taxon names</h2>
 <p>We start with the case when we have 1 value per species —morph in our case.</p>
-<div id="4152bcf5" class="cell" data-execution_count="3">
+<div id="fe468645" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>traits_morph <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"data/polemonium_traits_morph.csv"</span>, DataFrame)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select!</span>(traits_morph, <span class="op">:</span>morph, <span class="op">:</span>llength, <span class="op">:</span>elevation, <span class="op">:</span>lat)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(traits_morph, <span class="fl">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -535,8 +535,8 @@ For this tutorial, we will focus on leaflet length (log-transformed) for the res
 </div>
 </div>
 </div>
-<p>Taxon names are in the column “morph”, but don’t match exactly with the names in the network —somethign quite typical.</p>
-<div id="8245821a" class="cell" data-execution_count="4">
+<p>Taxon names are in the column “morph”, but don’t match exactly with the names in the network —something quite typical.</p>
+<div id="d87beae7" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setdiff</span>(<span class="fu">tiplabels</span>(net), traits_morph.morph) <span class="co"># names in the network but not in trait df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>7-element Vector{String}:
@@ -549,7 +549,7 @@ For this tutorial, we will focus on leaflet length (log-transformed) for the res
  "chartaceum_2"</code></pre>
 </div>
 </div>
-<div id="4764d45e" class="cell" data-execution_count="5">
+<div id="ba89fec3" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setdiff</span>(traits_morph.morph, <span class="fu">tiplabels</span>(net)) <span class="co"># names in trait df but not in network</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>20-element Vector{String}:
@@ -577,7 +577,7 @@ For this tutorial, we will focus on leaflet length (log-transformed) for the res
 </div>
 <p>We notice that some taxa in the network have a suffix “_2” that is not in the trait data, and that the trait data has extra species.</p>
 <p>Let’s use a regular expression to remove the suffix “_2” from the tip names in the network:</p>
-<div id="ba1dad00" class="cell" data-execution_count="6">
+<div id="5d3d1fe5" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> tip <span class="kw">in</span> net.node</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  tip.name <span class="op">=</span> <span class="fu">replace</span>(tip.name, <span class="st">r"_2</span><span class="sc">$</span><span class="st">" =&gt; </span>s<span class="st">"") # s"" to substitute what was found with nothing</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
@@ -587,7 +587,7 @@ For this tutorial, we will focus on leaflet length (log-transformed) for the res
 </div>
 </div>
 <p>Finally, let’s reduce our data frame to morphs that are in the network, also something often needed:</p>
-<div id="00f48414" class="cell" data-execution_count="7">
+<div id="8c75e864" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset!</span>(traits_morph, <span class="op">:</span>morph <span class="op">=&gt;</span> <span class="fu">ByRow</span>(<span class="fu">in</span>(<span class="fu">tiplabels</span>(net))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <div><div style="float: left;"><span>17×4 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
@@ -736,9 +736,9 @@ For this tutorial, we will focus on leaflet length (log-transformed) for the res
 </section>
 <section id="phylogenetic-regression" class="level2">
 <h2 class="anchored" data-anchor-id="phylogenetic-regression">phylogenetic regression</h2>
-<p>Let’s fit our model: a Browian motion by default. The output shows the estimated parameters, confidence intervals for the regression coefficients, and other summary.</p>
-<p>Functions for trait evolution are in package <a href="https://juliaphylo.github.io/PhyloTraits.jl/stable/">PhyloTraits</a>, so we load if first. We will also need to load package using StatsModels, for definting statistical model formulas.</p>
-<div id="87acb080" class="cell" data-execution_count="8">
+<p>Let’s fit our model: a Brownian motion by default. The output shows the estimated parameters, confidence intervals for the regression coefficients, and other summary.</p>
+<p>Functions for trait evolution are in package <a href="https://juliaphylo.github.io/PhyloTraits.jl/stable/">PhyloTraits</a>, so we load if first. We will also need to load package <code>StatsModels</code>, for defining statistical model formulas.</p>
+<div id="29b94a4f" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">PhyloTraits</span>, <span class="bu">StatsModels</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>fit_bm    <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits_morph, net;</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                    tipnames<span class="op">=:</span>morph) <span class="co"># default model: BM</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -765,7 +765,7 @@ AIC: 44.6888606908</code></pre>
 </div>
 </div>
 <p>Pagel’s lambda model can be fitted if the phylogeny is a time-consistent network (all paths from the root to a given node have the same length) and ultrametric:</p>
-<div id="695cd63d" class="cell" data-execution_count="9">
+<div id="91b53020" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">istimeconsistent</span>(net)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fit_pagel <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits_morph, net;</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                    model<span class="op">=</span><span class="st">"lambda"</span>, tipnames<span class="op">=:</span>morph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -808,7 +808,7 @@ AIC: 46.6750913026</code></pre>
 <h2 class="anchored" data-anchor-id="accounting-for-within-species-variation">accounting for within-species variation</h2>
 <p>If we have access to traits at the individual level, rather than aggregated at the species level, then we can account for within-species variation. It’s best to do so, because ignoring within-species variation (when present) can cause various biases.</p>
 <p>We start by reading the individual trait data and removing rows for taxa not in the network.</p>
-<div id="28242e3e" class="cell" data-execution_count="10">
+<div id="a41f3a94" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>traits_indiv <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"data/polemonium_traits_individual.csv"</span>, DataFrame)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">subset!</span>(traits_indiv, <span class="op">:</span>morph <span class="op">=&gt;</span> <span class="fu">ByRow</span>(<span class="fu">in</span>(<span class="fu">tiplabels</span>(net))))</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">last</span>(traits_indiv, <span class="fl">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -878,7 +878,7 @@ AIC: 46.6750913026</code></pre>
 </div>
 </div>
 <p>Here, the predictors (elevation and latitude) have the same value for all individuals within a species: entered as the average elevation and latiture across a much much bigger sample size for each species. The model below accounts for within-species variation in the response variable, not in the predictor variables.</p>
-<div id="255a0a34" class="cell" data-execution_count="11">
+<div id="5e5e3f03" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fit_ind <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits_indiv, net;</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                  tipnames<span class="op">=:</span>morph, withinspecies_var<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
@@ -913,7 +913,7 @@ AIC: 674.5023241226</code></pre>
 <section id="likelihood-ratio-test" class="level2">
 <h2 class="anchored" data-anchor-id="likelihood-ratio-test">likelihood ratio test</h2>
 <p>We can get p-values with a likelihood ratio test. For likelihood ratio tests, we need to use the ML criterion, not REML, to compare models with different “fixed” effects. ML tends to underestimate variances compared to REML, however.</p>
-<div id="023a86a3" class="cell" data-execution_count="12">
+<div id="6fd60114" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fit_ml <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits_indiv, net;</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                reml<span class="op">=</span><span class="cn">false</span>, tipnames<span class="op">=:</span>morph, withinspecies_var<span class="op">=</span><span class="cn">true</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fit_ml_nolat <span class="op">=</span> <span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation), traits_indiv, net;</span>
@@ -933,14 +933,14 @@ AIC: 674.5023241226</code></pre>
 <section id="within-species-variation-using-species-summaries" class="level2">
 <h2 class="anchored" data-anchor-id="within-species-variation-using-species-summaries">within-species variation using species summaries</h2>
 <p>The data we used above has 1 row per individual, which can lead to a very large data set (considering that we have 17 species):</p>
-<div id="2a10e270" class="cell" data-execution_count="13">
+<div id="56a194c8" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(traits_indiv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>954</code></pre>
 </div>
 </div>
 <p>and sometimes we don’t have this fine-grained individual-level information anyway. In fact, the method only needs to know the sample size, observed mean and variance of the response trait (log-leaflet-length) within each species. Let’s illustrate how to summarize our data with 1 row per species and extra columns: the number of sampled individuals, their mean and variance within each morph.</p>
-<div id="8ea8fd7a" class="cell" data-execution_count="14">
+<div id="e2c7272e" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>num_nonmissing <span class="op">=</span> x <span class="op">-&gt;</span> <span class="fu">length</span>(.!(<span class="fu">ismissing</span>.(x)))</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>traits_meanstd <span class="op">=</span> <span class="fu">combine</span>( <span class="fu">groupby</span>(traits_indiv, <span class="op">:</span>morph),</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span>llength <span class="op">=&gt;</span> mean <span class="op">=&gt;</span> <span class="op">:</span>llength, <span class="co"># last term = new column name</span></span>
@@ -1138,7 +1138,7 @@ AIC: 674.5023241226</code></pre>
 <li>the sample size, that is, the number of individuals from which the mean and SDs were calculated, named with suffix “_n”, so <code>llength_n</code> in our case.</li>
 </ul>
 <p>Now we fit the model as above using our summarized dataset, except that we use option <code>y_mean_std=true</code> to let the function know about the format, and get the same results as before:</p>
-<div id="44e45505" class="cell" data-execution_count="15">
+<div id="ca342d31" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">phylolm</span>(<span class="pp">@formula</span>(llength <span class="op">~</span> elevation <span class="op">+</span> lat), traits_meanstd, net; <span class="co"># same result as fit_ind</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>        tipnames<span class="op">=:</span>morph, withinspecies_var<span class="op">=</span><span class="cn">true</span>, y_mean_std<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">

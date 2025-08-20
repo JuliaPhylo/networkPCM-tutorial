@@ -479,7 +479,7 @@ window.Quarto = {
 </header>
 
 
-<div id="7891565f" class="cell" data-execution_count="1">
+<div id="083660c4" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code from prior sections</span></span>
@@ -492,7 +492,7 @@ window.Quarto = {
 </details>
 </div>
 <p>For illustrative purposes, we are going to look at the evolution of mean elevation as a discrete variable. We discretize elevation using the threshold 2.3 km below, because the distribution of elevation shows somewhat of a gap around that value, and a reasonable number of morphs both below and above that value.</p>
-<div id="31805ec8" class="cell" data-execution_count="2">
+<div id="e9de71b1" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    morph <span class="op">=</span> <span class="fu">String</span>.(traits[<span class="op">:</span>, <span class="op">:</span>morph]),</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    elevation <span class="op">=</span> <span class="fu">map</span>( x <span class="op">-&gt;</span> (x <span class="op">.&gt;</span> <span class="fl">2.3</span> ? <span class="st">"hi"</span> <span class="op">:</span> <span class="st">"lo"</span>), traits.elevation )</span>
@@ -606,7 +606,7 @@ window.Quarto = {
 <section id="estimating-the-evolutionary-rates" class="level2">
 <h2 class="anchored" data-anchor-id="estimating-the-evolutionary-rates">estimating the evolutionary rate(s)</h2>
 <p>For binary traits, we can use the <code>:ERSM</code> model, for “equal-rate substition model”:</p>
-<div id="bcbc5a0f" class="cell" data-execution_count="3">
+<div id="a4bf88f5" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> <span class="fu">fitdiscrete</span>(net, <span class="op">:</span>ERSM, dat.morph, <span class="fu">select</span>(dat, <span class="op">:</span>elevation))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>PhyloTraits.StatisticalSubstitutionModel:
@@ -624,7 +624,7 @@ log-likelihood: -11.05965</code></pre>
 </div>
 </div>
 <p>or the more general “binary trait substitution model” <code>:BTSM</code> that does not constrain the two rates to be equal:</p>
-<div id="8b108f11" class="cell" data-execution_count="4">
+<div id="4270fc05" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fit_uneq <span class="op">=</span> <span class="fu">fitdiscrete</span>(net, <span class="op">:</span>BTSM, dat.morph, <span class="fu">select</span>(dat, <span class="op">:</span>elevation))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>PhyloTraits.StatisticalSubstitutionModel:
@@ -639,13 +639,13 @@ log-likelihood: -10.83348</code></pre>
 </div>
 </div>
 <p>Using a likelihood ratio test, we see that there is <em>no</em> evidence for unequal rates:</p>
-<div id="8cc8b48b" class="cell" data-execution_count="5">
+<div id="52c31c97" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x2 <span class="op">=</span> <span class="fl">2</span><span class="fu">*</span>(<span class="fu">loglikelihood</span>(fit_uneq) <span class="op">-</span> <span class="fu">loglikelihood</span>(fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>0.45233716294591275</code></pre>
 </div>
 </div>
-<div id="8cfd2688" class="cell" data-execution_count="6">
+<div id="6dbe932a" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="bu">Distributions</span>: Chisq, ccdf</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ccdf</span>(<span class="fu">Chisq</span>(<span class="fl">1</span>), x2) <span class="co"># p-value: P(Χ² on 1 df &gt; observed x2)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -656,7 +656,7 @@ log-likelihood: -10.83348</code></pre>
 <section id="ancestral-state-probabilities" class="level2">
 <h2 class="anchored" data-anchor-id="ancestral-state-probabilities">ancestral state probabilities</h2>
 <p>We can calculate ancestral state probabilities like this, but the output data frame is hard to interpret because it’s unclear which node has which number:</p>
-<div id="45a716b7" class="cell" data-execution_count="7">
+<div id="89f1ff90" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>asr <span class="op">=</span> <span class="fu">ancestralreconstruction</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <div><div style="float: left;"><span>39×4 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">14 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
@@ -911,7 +911,7 @@ Figure&nbsp;1: network stored in fitted object, to map ancestral state probabili
 <p>What is the evidence that a trait was inherited via gene flow (along the minor hybrid edge) versus “vertically” (via the major hybrid edge)?</p>
 <p>To answer this question, we can extract the prior probability of either option, and the posterior probabilities conditional on the data. Then, the Bayes factor to compare the 2 hypotheses, minor versus major edge (or gene flow versus vertical), can be expressed as an odds ratio: <span class="math display">\[\mathrm{BF} = \frac{P(\mathrm{data} \mid \mathrm{minor})}{P(\mathrm{data} \mid \mathrm{mafor})} = \frac{\frac{P(\mathrm{minor} \mid \mathrm{data})}{P(\mathrm{major}\mid\mathrm{data})}}{\frac{P(\mathrm{minor})}{P(\mathrm{major})}}\,.\]</span></p>
 <p>Here, let’s say we want to focus on the reticulation that is ancestral to elusum (node 33, H20). From <a href="#fig-5-asr1" class="quarto-xref">Figure&nbsp;1</a> (left) we see that the major (“vertical”) parent edge has γ = 0.741 = P(major) and the minor (“gene flow”) edge has γ = 0.259 = P(minor). So at this reticulation, the prior odds of the trait being inherited via gene flow is 0.259/0.741 = 0.35. Here how we may get this prior odds programmatically:</p>
-<div id="bcb1948b" class="cell" data-execution_count="9">
+<div id="c3765389" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>nodeH20 <span class="op">=</span> net.node[<span class="fu">findfirst</span>(n<span class="op">-&gt;</span>n.name<span class="op">==</span><span class="st">"H20"</span>, net.node)] <span class="co"># find node named H20</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>priorminor <span class="op">=</span> <span class="fu">getparentedgeminor</span>(nodeH20).gamma            <span class="co"># γ of its minor parent</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>priorodds <span class="op">=</span> priorminor <span class="op">/</span> (<span class="fl">1</span><span class="op">-</span>priorminor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -920,7 +920,7 @@ Figure&nbsp;1: network stored in fitted object, to map ancestral state probabili
 </div>
 </div>
 <p>To extract the posterior odds and calculate the Bayes factor, we can do as follows, to focus on just 1 reticulation of interest and integrate out what happened at other reticulations:</p>
-<div id="3119d551" class="cell" data-execution_count="10">
+<div id="aabfbbd0" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>postminor <span class="op">=</span> <span class="fu">exp</span>(PhyloTraits.<span class="fu">posterior_loghybridweight</span>(fit, <span class="st">"H20"</span>))</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>postodds <span class="op">=</span> postminor <span class="op">/</span> (<span class="fl">1</span><span class="op">-</span>postminor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
@@ -928,7 +928,7 @@ Figure&nbsp;1: network stored in fitted object, to map ancestral state probabili
 </div>
 </div>
 <p>That’s an increase. The Bayes factor to compare the gene flow (minor edge) versus vertical (major edge) hypotheses is then:</p>
-<div id="7eb3b5d4" class="cell" data-execution_count="11">
+<div id="fe49fc38" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>postodds <span class="op">/</span> priorodds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>1.8000398380912406</code></pre>
